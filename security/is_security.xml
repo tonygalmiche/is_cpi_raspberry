@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data noupdate="0">
+
+    <record model="ir.module.category" id="module_is_cpi_raspberry">
+        <field name="name">CPI Raspberry</field>
+        <field name="description">CPI Raspberry</field>
+        <field name="sequence">10</field>
+   </record>
+
+    <record id="group_gestionnaire_cpi_raspberry" model="res.groups">
+        <field name="name">Gestionnaire CPI Raspberry</field>
+        <field name="comment">Gestionnaire CPI Raspberry</field>
+        <field name="category_id" ref="module_is_cpi_raspberry"/>
+        <field name="users" eval="[(4, ref('base.user_root'))]"/>
+    </record>
+
+</data>
+</openerp>
