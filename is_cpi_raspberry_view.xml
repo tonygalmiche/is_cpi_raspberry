@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-    <menuitem name="CPI-Raspberry" id="menu_is_cpi_raspberry_root" sequence="1"/>
+    <menuitem name="THEIA" id="menu_is_cpi_raspberry_root" sequence="1"/>
 
     <menuitem name="Presse" id="menu_is_presse_root" 
               parent="menu_is_cpi_raspberry_root" sequence="10"/>
@@ -210,12 +210,12 @@
         <form>
             <sheet>
                 <group>
-                    <field name="date_heure"/>
-                    <field name="presse_id"/>
+                    <field name="date_heure"                      readonly="1"/>
+                    <field name="presse_id"                       readonly="1"/>
                     <field name="type_arret_id"/>
-                    <field name="origine"/>
-                    <field name="tps_arret" widget="float_time"/>
-                    <field name="of_ids" widget="many2many_tags" />
+                    <field name="origine"                         readonly="1"/>
+                    <field name="tps_arret" widget="float_time"   readonly="1"/>
+                    <field name="of_ids" widget="many2many_tags"  readonly="1"/>
                 </group>
             </sheet>
         </form>
@@ -677,12 +677,12 @@
               sequence="20" groups="base.group_erp_manager"/>
 
 
-
-
     <!-- Lancement automatisé du calcul du bilan de fin d'OF -->
+    <!-- J'ai désactivé cette action, car elle ne fonctionne pas -->
+    <!-- Je lance cela via un script XMLRPC externe -->
     <record forcecreate="True" id="is_bilan_fin_of_scheduler_action" model="ir.cron">
         <field name="name">Bilan de fin d'OF</field>
-        <field eval="True" name="active"/>
+        <field eval="False" name="active"/>
         <field name="user_id" ref="base.user_root"/>
         <field name="interval_number">1</field>
         <field name="interval_type">hours</field> <!--ou days ou minutes -->
