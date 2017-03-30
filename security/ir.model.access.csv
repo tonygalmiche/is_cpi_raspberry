@@ -1,5 +1,8 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
 access_is_presse,access_is_presse,model_is_presse,base.group_user,1,0,0,0
+access_is_presse_gestionnaire,access_is_presse,model_is_presse,group_gestionnaire_cpi_raspberry,1,1,0,0
+
 access_is_raspberry,access_is_raspberry,model_is_raspberry,base.group_user,1,0,0,0
 access_is_presse_cycle,access_is_presse_cycle,model_is_presse_cycle,base.group_user,1,0,0,0
 access_is_of,access_is_of,model_is_of,base.group_user,1,0,0,0
