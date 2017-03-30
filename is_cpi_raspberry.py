@@ -223,7 +223,7 @@ class is_of(models.Model):
         ])
         ofs.bilan_fin_of()
         #***********************************************************************
-        return
+        return []
 
     @api.multi
     def bilan_fin_of(self):
@@ -300,7 +300,7 @@ class is_of(models.Model):
             for row in result:
                 obj.nb_cycles=row[0]
             #*******************************************************************
-        return
+        return []
 
 
 class is_of_tps(models.Model):
