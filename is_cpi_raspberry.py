@@ -112,15 +112,18 @@ class is_presse(models.Model):
 
     @api.depends('name')
     def _nb_cycles(self):
-        cr, uid, context = self.env.args
-        context = context or {}
-        for obj in self:
-            cr.execute("""
-                select count(*) 
-                from is_presse_cycle 
-                where presse_id="""+str(obj.id))
-            nb_cycles = cr.fetchone()[0] or 0.0
-            obj.nb_cycles = nb_cycles
+        return
+
+#TODO : J'ai désactivé cette fonction le 01/04/17, car la requète prend trop de temps
+#        cr, uid, context = self.env.args
+#        context = context or {}
+#        for obj in self:
+#            cr.execute("""
+#                select count(*) 
+#                from is_presse_cycle 
+#                where presse_id="""+str(obj.id))
+#            nb_cycles = cr.fetchone()[0] or 0.0
+#            obj.nb_cycles = nb_cycles
 
 
     _name = 'is.presse'
