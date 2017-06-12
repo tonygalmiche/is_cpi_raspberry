@@ -25,4 +25,4 @@ access_is_of_tps_gestionnaire,access_is_of_tps,model_is_of_tps,group_gestionnair
 access_is_of_rebut,access_is_of_rebut,model_is_of_rebut,base.group_user,1,0,0,0
 access_is_of_rebut_gestionnaire,access_is_of_rebut,model_is_of_rebut,group_gestionnaire_cpi_raspberry,1,1,1,1
 
-
+access_is_capteur,access_is_capteur,model_is_capteur,base.group_user,1,0,0,0

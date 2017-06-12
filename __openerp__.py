@@ -17,8 +17,9 @@ InfoSaône - Module Odoo CPI-Raspberry pour Plastigray
     'data': [
         "security/is_security.xml",
         "security/ir.model.access.csv",
-        "assets.xml",            # Permet d'ajouter des css et des js
+        "assets.xml",
         "is_cpi_raspberry_view.xml",
+        "is_capteur_view.xml",
         "res_users_view.xml",
         "report/is_report_rebuts.xml",
     ],
