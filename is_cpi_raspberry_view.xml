@@ -303,35 +303,35 @@
                 <group>
                     <group>
                         <field name="name" readonly="1"/>
-                        <field name="moule"        readonly="1"/>
-                        <field name="nb_empreintes" groups="is_cpi_raspberry.group_gestionnaire_cpi_raspberry"/> <!-- Seulement ce groupe peut voir/modifier cette valeur -->
-                        <field name="coef_cpi"      groups="is_cpi_raspberry.group_gestionnaire_cpi_raspberry"/>
-                        <field name="code_article" readonly="1"/>
-                        <field name="designation"  readonly="1"/>
-                        <field name="uc"           readonly="1"/>
-                        <field name="cout"         readonly="1"/>
-                        <field name="presse_id"    />
-                        <field name="affecte"      readonly="1"/>
-                        <field name="ordre"        readonly="1"/>
+                        <field name="moule"         readonly="1"/>
+                        <field name="nb_empreintes"/>
+                        <field name="coef_cpi"      readonly="1"/>
+                        <field name="code_article"  readonly="1"/>
+                        <field name="designation"   readonly="1"/>
+                        <field name="uc"            readonly="1"/>
+                        <field name="cout"          readonly="1"/>
+                        <field name="presse_id"     readonly="1"/>
+                        <field name="affecte"       readonly="1"/>
+                        <field name="ordre"         readonly="1"/>
                     </group>
                     <group>
-                        <field name="qt"           readonly="1"/>
-                        <field name="nb_cycles"    invisible="1"/>
-                        <field name="qt_theorique" />
-                        <field name="qt_declaree"  />
-                        <field name="qt_restante"  />
-                        <field name="qt_rebut"     />
-                        <field name="cycle_gamme"  readonly="1"/>
-                        <field name="cycle_moyen"  readonly="1"/>
-                        <field name="tps_restant"  readonly="1" widget="float_time"/>
-                        <field name="heure_debut"  groups="is_cpi_raspberry.group_gestionnaire_cpi_raspberry"/>
-                        <field name="heure_fin"    groups="is_cpi_raspberry.group_gestionnaire_cpi_raspberry"/>
+                        <field name="qt"            readonly="1"/>
+                        <field name="nb_cycles"     invisible="1"/>
+                        <field name="qt_theorique"  readonly="1"/>
+                        <field name="qt_declaree"   readonly="1"/>
+                        <field name="qt_restante"   readonly="1"/>
+                        <field name="qt_rebut"      readonly="1"/>
+                        <field name="cycle_gamme"   readonly="1"/>
+                        <field name="cycle_moyen"   readonly="1"/>
+                        <field name="tps_restant"   readonly="1" widget="float_time"/>
+                        <field name="heure_debut"   readonly="1"/>
+                        <field name="heure_fin"     readonly="1"/>
                     </group>
                 </group>
                 <group>
                     <group>
-                        <field name="tps_ids" nolabel="1" >
-                            <tree editable="bottom">
+                        <field name="tps_ids" nolabel="1" readonly="1">
+                            <tree>
                                 <field name="etat_presse_id" />
                                 <field name="tps_arret" widget="float_time" sum="Total"/>
                                 <field name="couleur" widget='color'/>
@@ -339,8 +339,8 @@
                         </field>
                     </group>
                     <group>
-                        <field name="rebut_ids" nolabel="1" >
-                            <tree editable="bottom">
+                        <field name="rebut_ids" nolabel="1" readonly="1">
+                            <tree>
                                  <field name="defaut_id" />
                                  <field name="qt_rebut" sum="Total"/>
                             </tree>
@@ -351,6 +351,46 @@
         </form>
         </field>
     </record>
+
+
+    <!-- Cette vue permet de rendre modifiable certains champs au groupe 'Gestionnaire THEIA' -->
+    <record id="is_of_gestionnaire_form_view" model="ir.ui.view">
+        <field name="name">is_of_gestionnaire_form_view</field>
+        <field name="model">is.of</field>
+        <field name="inherit_id" ref="is_cpi_raspberry.is_of_form_view"/>
+        <field name="groups_id" eval="[(4, ref('is_cpi_raspberry.group_gestionnaire_cpi_raspberry'))]"/>
+        <field name="arch" type="xml">
+            <field name="coef_cpi" position="replace">
+                <field name="coef_cpi"/>
+            </field>
+            <field name="heure_debut" position="replace">
+                <field name="heure_debut"/>
+            </field>
+            <field name="heure_fin" position="replace">
+                <field name="heure_fin"/>
+            </field>
+            <field name="presse_id" position="replace">
+                <field name="presse_id"/>
+            </field>
+            <field name="qt_theorique" position="replace">
+                <field name="qt_theorique"/>
+            </field>
+            <field name="qt_declaree" position="replace">
+                <field name="qt_declaree"/>
+            </field>
+            <field name="qt_restante" position="replace">
+                <field name="qt_restante"/>
+            </field>
+            <field name="qt_rebut" position="replace">
+                <field name="qt_rebut"/>
+            </field>
+        </field>
+    </record>
+
+
+
+
+
     <record model="ir.ui.view" id="is_of_search_view" >
         <field name="name">is.of.search</field>
         <field name="model">is.of</field>
