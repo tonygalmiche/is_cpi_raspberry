@@ -104,9 +104,17 @@
 
 
     <!-- Parc des presses -->
+    <!--
     <record model="ir.actions.act_url" id="is_url_parc_presses_action">
         <field name="name">http://raspberry-cpi/atelier.php</field>
         <field name="url">http://raspberry-cpi/atelier.php</field>
+        <field name="type">ir.actions.act_url</field>
+    </record>
+    -->
+
+    <!-- Parc des presses -->
+    <record model="ir.actions.act_url" id="is_url_parc_presses_action">
+        <field name="name">is_url_parc_presses_action</field>
         <field name="type">ir.actions.act_url</field>
     </record>
     <menuitem name="Parc des presses" id="is_url_parc_presses_menu" action="is_url_parc_presses_action"
@@ -115,19 +123,32 @@
 
 
     <!-- Indicateurs -->
+    <!--
     <record model="ir.actions.act_url" id="is_url_indicateur_rebuts_action">
         <field name="name">Rebuts</field>
         <field name="url">http://odoo/odoo-cpi/rebuts.php</field>
         <field name="type">ir.actions.act_url</field>
     </record>
+    -->
+    <record model="ir.actions.act_url" id="is_url_indicateur_rebuts_action">
+        <field name="name">is_url_indicateur_rebuts_action</field>
+        <field name="type">ir.actions.act_url</field>
+    </record>
     <menuitem name="Rebuts" id="is_url_indicateur_rebuts_menu" action="is_url_indicateur_rebuts_action"
               parent="menu_is_cpi_indicateurs" sequence="10" />
 
+    <!--
     <record model="ir.actions.act_url" id="is_url_indicateur_trs_action">
         <field name="name">TRS</field>
         <field name="url">http://odoo/odoo-cpi/trs.php</field>
         <field name="type">ir.actions.act_url</field>
     </record>
+    -->
+    <record model="ir.actions.act_url" id="is_url_indicateur_trs_action">
+        <field name="name">is_url_indicateur_trs_action</field>
+        <field name="type">ir.actions.act_url</field>
+    </record>
+
     <menuitem name="TRS" id="is_url_indicateur_trs_menu" action="is_url_indicateur_trs_action"
               parent="menu_is_cpi_indicateurs" sequence="20" />
 
