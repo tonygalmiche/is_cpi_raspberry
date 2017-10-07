@@ -89,8 +89,10 @@ class is_presse(models.Model):
     def interface_presse(self, cr, uid, ids, context=None):
         presse=""
         for obj in self.browse(cr, uid, ids, context=context):
-            presse=obj.name
-        url = "http://raspberry-cpi/presse.php?presse="+presse
+            presse = obj.name
+            user   = self.pool['res.users'].browse(cr, uid, [uid], context=context)[0]
+            soc    = user.company_id.is_code_societe
+        url = "http://raspberry-cpi/presse.php?soc="+str(soc)+"&presse="+presse
         return {
             'name'     : 'Go to website',
             'res_model': 'ir.actions.act_url',
