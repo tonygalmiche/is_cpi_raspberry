@@ -309,6 +309,7 @@
                 <field name="qt_rebut"/>
                 <field name="cycle_gamme"/>
                 <field name="cycle_moyen" />
+                <field name="cycle_moyen_serie" />
                 <field name="tps_restant" widget="float_time"/>
                 <field name="heure_debut"  />
                 <field name="heure_fin"  />
@@ -344,6 +345,7 @@
                         <field name="qt_rebut"      readonly="1"/>
                         <field name="cycle_gamme"   readonly="1"/>
                         <field name="cycle_moyen"   readonly="1"/>
+                        <field name="cycle_moyen_serie" readonly="1"/>
                         <field name="tps_restant"   readonly="1" widget="float_time"/>
                         <field name="heure_debut"   readonly="1"/>
                         <field name="heure_fin"     readonly="1"/>

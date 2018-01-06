@@ -173,31 +173,31 @@ class is_of(models.Model):
     _rec_name = "name"
     _order='name desc'
 
-    name          = fields.Char('N°OF' , required=True)
-    moule         = fields.Char('Moule' , required=False)
-    nb_empreintes = fields.Integer("Nombre d'empreintes", required=False)
-    coef_cpi      = fields.Integer("Coefficient Theia", required=False)
-    code_article  = fields.Char('Code article' , required=True)
-    designation   = fields.Char('Désignation' , required=False)
-    uc            = fields.Integer('Qt par UC', required=False)
-    cout          = fields.Float('Coût article', digits=(12,4), required=False)
-    presse_id     = fields.Many2one('is.presse', u"Presse", required=False, select=True)
-    affecte       = fields.Boolean('OF affecté à la presse', select=True,help="Cocher cette case si l'OF est affecté à la presse")
-    ordre         = fields.Integer('Ordre', select=True, required=False)
-    qt            = fields.Integer('Qt à produire', required=False)
-    nb_cycles     = fields.Integer('Nombre de cycles')
-    qt_theorique  = fields.Integer('Qt réalisée théorique', required=False)
-    qt_declaree   = fields.Integer('Qt déclarée', required=False)
-    qt_restante   = fields.Integer('Qt restante', required=False)
-    qt_rebut      = fields.Integer('Qt rebuts', required=False)
-    cycle_gamme   = fields.Float('Temps cycle gamme', digits=(12,1), required=False)
-    cycle_moyen   = fields.Float('Temps cycle moyen', digits=(12,1), required=False)
-    tps_restant   = fields.Float('Temps de production restant', required=False)
-    heure_debut   = fields.Datetime('Heure de début de production', select=True, required=False)
-    heure_fin     = fields.Datetime('Heure de fin de production', required=False, select=True)
-
-    tps_ids       = fields.One2many('is.of.tps'  , 'of_id', u"Répartition des temps d'arrêt")
-    rebut_ids     = fields.One2many('is.of.rebut', 'of_id', u"Répartition des rebuts")
+    name              = fields.Char('N°OF' , required=True)
+    moule             = fields.Char('Moule' , required=False)
+    nb_empreintes     = fields.Integer("Nombre d'empreintes", required=False)
+    coef_cpi          = fields.Integer("Coefficient Theia", required=False)
+    code_article      = fields.Char('Code article' , required=True)
+    designation       = fields.Char('Désignation' , required=False)
+    uc                = fields.Integer('Qt par UC', required=False)
+    cout              = fields.Float('Coût article', digits=(12,4), required=False)
+    presse_id         = fields.Many2one('is.presse', u"Presse", required=False, select=True)
+    affecte           = fields.Boolean('OF affecté à la presse', select=True,help="Cocher cette case si l'OF est affecté à la presse")
+    ordre             = fields.Integer('Ordre', select=True, required=False)
+    qt                = fields.Integer('Qt à produire', required=False)
+    nb_cycles         = fields.Integer('Nombre de cycles')
+    qt_theorique      = fields.Integer('Qt réalisée théorique', required=False)
+    qt_declaree       = fields.Integer('Qt déclarée', required=False)
+    qt_restante       = fields.Integer('Qt restante', required=False)
+    qt_rebut          = fields.Integer('Qt rebuts', required=False)
+    cycle_gamme       = fields.Float('Cycle gamme', digits=(12,1), required=False)
+    cycle_moyen       = fields.Float('Cycle moyen (10 derniers cycles)', digits=(12,1), required=False)
+    cycle_moyen_serie = fields.Float('Cycle moyen', help=u'Temps de production série / nombre de cycles', digits=(12,1), required=False)
+    tps_restant       = fields.Float('Temps de production restant', required=False)
+    heure_debut       = fields.Datetime('Heure de début de production', select=True, required=False)
+    heure_fin         = fields.Datetime('Heure de fin de production', required=False, select=True)
+    tps_ids           = fields.One2many('is.of.tps'  , 'of_id', u"Répartition des temps d'arrêt")
+    rebut_ids         = fields.One2many('is.of.rebut', 'of_id', u"Répartition des rebuts")
     
     _sql_constraints = [
         ('name_uniq', 'unique(name)', u"Le numéro d'OF doit être unique !"),
@@ -233,6 +233,18 @@ class is_of(models.Model):
     @api.multi
     def bilan_fin_of(self):
         cr = self._cr
+
+        #** Recherche id 'Production série' ************************************
+        SQL="""
+            select id from is_etat_presse where name='Production série'
+        """
+        cr.execute(SQL)
+        result = cr.fetchall()
+        id_etat_presse=0
+        for row in result:
+            id_etat_presse=row[0]
+        #***********************************************************************
+
         nb=len(self)
         ct=0
         for obj in self:
@@ -252,14 +264,23 @@ class is_of(models.Model):
             cr.execute(SQL)
             result = cr.fetchall()
             obj.tps_ids.unlink()
+            tps_prod_serie=0
             for row in result:
                 vals={
                     'of_id'         : obj.id,
                     'etat_presse_id': row[0],
                     'tps_arret'     : row[1],
                 }
+                if id_etat_presse==row[0]:
+                    tps_prod_serie=row[1]
                 self.env['is.of.tps'].create(vals)
             #*******************************************************************
+
+            #** Temps de cycle moyen série *************************************
+            if obj.qt_theorique!=0:
+                obj.cycle_moyen_serie=tps_prod_serie*3600/obj.qt_theorique
+            #*******************************************************************
+
 
             #** Répartition des rebuts *****************************************
             SQL="""
