@@ -307,6 +307,9 @@
                 <field name="qt_declaree"/>
                 <field name="qt_restante"/>
                 <field name="qt_rebut"/>
+                <field name="qt_rebut_theo"/>
+                <field name="taux_rebut"/>
+                <field name="taux_rebut_theo"/>
                 <field name="cycle_gamme"/>
                 <field name="cycle_moyen" />
                 <field name="cycle_moyen_serie" />
@@ -337,18 +340,21 @@
                         <field name="ordre"         readonly="1"/>
                     </group>
                     <group>
-                        <field name="qt"            readonly="1"/>
-                        <field name="nb_cycles"     invisible="1"/>
-                        <field name="qt_theorique"  readonly="1"/>
-                        <field name="qt_declaree"   readonly="1"/>
-                        <field name="qt_restante"   readonly="1"/>
-                        <field name="qt_rebut"      readonly="1"/>
-                        <field name="cycle_gamme"   readonly="1"/>
-                        <field name="cycle_moyen"   readonly="1"/>
+                        <field name="qt"                readonly="1"/>
+                        <field name="nb_cycles"         invisible="1"/>
+                        <field name="qt_theorique"      readonly="1"/>
+                        <field name="qt_declaree"       readonly="1"/>
+                        <field name="qt_restante"       readonly="1"/>
+                        <field name="qt_rebut"          readonly="1"/>
+                        <field name="qt_rebut_theo"     readonly="1"/>
+                        <field name="taux_rebut"        readonly="1"/>
+                        <field name="taux_rebut_theo"   readonly="1"/>
+                        <field name="cycle_gamme"       readonly="1"/>
+                        <field name="cycle_moyen"       readonly="1"/>
                         <field name="cycle_moyen_serie" readonly="1"/>
-                        <field name="tps_restant"   readonly="1" widget="float_time"/>
-                        <field name="heure_debut"   readonly="1"/>
-                        <field name="heure_fin"     readonly="1"/>
+                        <field name="tps_restant"       readonly="1" widget="float_time"/>
+                        <field name="heure_debut"       readonly="1"/>
+                        <field name="heure_fin"         readonly="1"/>
                     </group>
                 </group>
                 <group>

@@ -189,7 +189,10 @@ class is_of(models.Model):
     qt_theorique      = fields.Integer('Qt réalisée théorique', required=False)
     qt_declaree       = fields.Integer('Qt déclarée', required=False)
     qt_restante       = fields.Integer('Qt restante', required=False)
-    qt_rebut          = fields.Integer('Qt rebuts', required=False)
+    qt_rebut          = fields.Integer('Qt rebuts')
+    qt_rebut_theo     = fields.Integer('Qt rebuts théorique')
+    taux_rebut        = fields.Float('Taux rebuts (%)'          , digits=(12,2))
+    taux_rebut_theo   = fields.Float('Taux rebuts théorique (%)', digits=(12,2))
     cycle_gamme       = fields.Float('Cycle gamme', digits=(12,1), required=False)
     cycle_moyen       = fields.Float('Cycle moyen (10 derniers cycles)', digits=(12,1), required=False)
     cycle_moyen_serie = fields.Float('Cycle moyen', help=u'Temps de production série / nombre de cycles', digits=(12,1), required=False)
@@ -326,6 +329,27 @@ class is_of(models.Model):
             for row in result:
                 obj.nb_cycles=row[0]
             #*******************************************************************
+
+
+            #** Taux de rebuts *************************************************
+            qt_bonne = obj.qt_declaree or 0
+            qt_rebut = obj.qt_rebut or 0
+            taux_rebut=0
+            if (qt_bonne+qt_rebut)!=0:
+                taux_rebut=100.0*qt_rebut/(qt_bonne+qt_rebut)
+            obj.taux_rebut=taux_rebut
+
+            qt_theorique   = obj.qt_theorique or 0
+            qt_rebut_theo  = qt_theorique-qt_bonne
+            if qt_rebut_theo<0:
+                qt_rebut_theo=0
+            taux_rebut_theo=0
+            if qt_theorique!=0:
+                taux_rebut_theo=100.0*qt_rebut_theo/qt_theorique
+            obj.qt_rebut_theo   = qt_rebut_theo
+            obj.taux_rebut_theo = taux_rebut_theo
+            #*******************************************************************
+
         return []
 
 
