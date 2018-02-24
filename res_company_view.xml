@@ -8,7 +8,8 @@
             <field name="inherit_id" ref="base.view_company_form" />
             <field name="arch" type="xml">
                 <field name="partner_id" position="after">
-                    <field name="is_code_societe" />
+                    <field name="is_code_societe"/>
+                    <field name="is_dest_bilan_of_ids" widget="many2many_tags"/>
                 </field>
             </field>
         </record>

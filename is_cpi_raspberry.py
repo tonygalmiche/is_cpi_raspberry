@@ -6,6 +6,10 @@ from openerp.tools.translate import _
 import time
 import datetime
 import os
+from openerp.exceptions import Warning
+import logging
+_logger = logging.getLogger(__name__)
+
 
 
 couleurs=[
@@ -201,6 +205,7 @@ class is_of(models.Model):
     heure_fin         = fields.Datetime('Heure de fin de production', required=False, select=True)
     tps_ids           = fields.One2many('is.of.tps'  , 'of_id', u"Répartition des temps d'arrêt")
     rebut_ids         = fields.One2many('is.of.rebut', 'of_id', u"Répartition des rebuts")
+    impression_bilan  = fields.Boolean('Bilan imprimé et envoyé par mail', select=True)
     
     _sql_constraints = [
         ('name_uniq', 'unique(name)', u"Le numéro d'OF doit être unique !"),
@@ -215,21 +220,29 @@ class is_of(models.Model):
     @api.multi
     def run_bilan_fin_of(self):
         #** OF terminés depuis moins de 2 jours ********************************
+        _logger.info("#### Bilan des OF terminés depuis 24H - Début ####")
         now  = datetime.date.today()                  # Date du jour
-        heure_fin = now + datetime.timedelta(days=-2) # Date -2 jour
+        heure_fin = now + datetime.timedelta(days=-1) # Date -1 jour
         heure_fin = heure_fin.strftime('%Y-%m-%d')    # Formatage
         ofs=self.env['is.of'].search([
             ('heure_fin' ,'>=',heure_fin),
         ])
         ofs.bilan_fin_of()
+        for of in ofs:
+            if of.impression_bilan!=True:
+                of.envoyer_par_mail_action()
+                of.impression_bilan=True
+        _logger.info("#### Bilan des OF terminés depuis 24H - Fin ####")
         #***********************************************************************
 
         #** OF en cours ********************************************************
+        _logger.info("#### Bilan des OF en cours - Début ####")
         ofs=self.env['is.of'].search([
             ('heure_debut' ,'!=', False),
             ('heure_fin'   ,'=' , False),
         ])
         ofs.bilan_fin_of()
+        _logger.info("#### Bilan des OF en cours - Fin ####")
         #***********************************************************************
         return []
 
@@ -252,7 +265,7 @@ class is_of(models.Model):
         ct=0
         for obj in self:
             ct=ct+1
-            print str(ct)+u"/"+str(nb)+u" - "+obj.name
+            _logger.info(str(ct)+u"/"+str(nb)+u" - "+obj.name)
 
             #** Répartition des temps d'arrêt **********************************
             SQL="""
@@ -351,6 +364,75 @@ class is_of(models.Model):
             #*******************************************************************
 
         return []
+
+
+
+    @api.multi
+    def envoyer_par_mail_action(self):
+        for obj in self:
+            user  = self.env['res.users'].browse(self._uid)
+            email_to=[]
+            for row in user.company_id.is_dest_bilan_of_ids:
+                if row.email:
+                    email_to.append(row.name+u' <'+row.email+u'>')
+
+            name='bilan-fin-of.pdf'
+
+            #** Génération du PDF **********************************************
+            pdf = self.env['report'].get_pdf(obj, 'is_cpi_raspberry.bilan_fin_of_report')
+
+            #** Recherche si une pièce jointe est déja associèe ****************
+            model=self._name
+            attachment_obj = self.env['ir.attachment']
+            attachments = attachment_obj.search([('res_model','=',model),('res_id','=',obj.id),('name','=',name)])
+            # ******************************************************************
+
+            #** Creation ou modification de la pièce jointe ********************
+            vals = {
+                'name':        name,
+                'datas_fname': name,
+                'type':        'binary',
+                'res_model':   model,
+                'res_id':      obj.id,
+                'datas':       pdf.encode('base64'),
+            }
+            attachment_id=False
+            if attachments:
+                for attachment in attachments:
+                    attachment.write(vals)
+                    attachment_id=attachment.id
+            else:
+                attachment = attachment_obj.create(vals)
+                attachment_id=attachment.id
+            #*******************************************************************
+
+            if len(email_to)>0:
+                body_html=u"""
+                    <html>
+                        <head>
+                            <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+                        </head>
+                        <body>
+                            <p>Bonjour, </p>
+                            <p>Ci-joint le bilan de l'OF """+obj.name+"""</p>
+                        </body>
+                    </html>
+                """
+                email_vals={
+                    'subject'       : "[THEIA] Bilan de l'OF "+obj.name,
+                    'email_to'      : ';'.join(email_to), 
+                    'email_cc'      : "",
+                    'email_from'    : "robot@plastigray.com", 
+                    'body_html'     : body_html.encode('utf-8'), 
+                    'attachment_ids': [(6, 0, [attachment_id])] 
+                }
+                email_id=self.env['mail.mail'].create(email_vals)
+                self.env['mail.mail'].send(email_id)
+
+                _logger.info(u"Envoi par mail du bilan de l'OF "+obj.name+u' à '+u';'.join(email_to))
+
+
+
 
 
 class is_of_tps(models.Model):

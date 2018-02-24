@@ -324,6 +324,14 @@
         <field name="model">is.of</field>
         <field name="arch" type="xml">
         <form>
+            <header>
+                <button 
+                    name="envoyer_par_mail_action"
+                    string="Envoyer par mail le blian de fin d'OF"
+                    type="object"
+                    groups="base.group_system"
+                />
+            </header>
             <sheet>
                 <group>
                     <group>
@@ -747,14 +755,12 @@
 
 
     <!-- Lancement automatisé du calcul du bilan de fin d'OF -->
-    <!-- J'ai désactivé cette action, car elle ne fonctionne pas -->
-    <!-- Je lance cela via un script XMLRPC externe -->
     <record forcecreate="True" id="is_bilan_fin_of_scheduler_action" model="ir.cron">
         <field name="name">Bilan de fin d'OF</field>
-        <field eval="False" name="active"/>
+        <field eval="True" name="active"/>
         <field name="user_id" ref="base.user_root"/>
-        <field name="interval_number">1</field>
-        <field name="interval_type">hours</field> <!--ou days ou minutes -->
+        <field name="interval_number">10</field>
+        <field name="interval_type">minutes</field>
         <field name="numbercall">-1</field>
         <field eval="False" name="doall"/>
         <field eval="'is.of'" name="model"/>
@@ -762,6 +768,10 @@
         <field eval="'(True,)'" name="args"/>
     </record>
 
+
+    <!-- Déplacement des menus standard pour les masquer -->
+    <menuitem id="mail.mail_feeds_main"      sequence="90" name="Messagerie"         parent="base.menu_custom"/>
+    <menuitem id="knowledge.menu_document"   sequence="91" name="Connaissances"      parent="base.menu_custom"/>
 
 
 

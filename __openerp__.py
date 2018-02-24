@@ -13,7 +13,11 @@ InfoSaône - Module Odoo CPI-Raspberry pour Plastigray
     'author': 'InfoSaône',
     'maintainer': 'InfoSaône',
     'website': 'http://www.infosaone.com',
-    'depends': [],
+    'depends': [
+        "report",
+        "mail",
+        "document",
+    ],
     'data': [
         "security/is_security.xml",
         "security/ir.model.access.csv",
@@ -23,6 +27,9 @@ InfoSaône - Module Odoo CPI-Raspberry pour Plastigray
         "res_users_view.xml",
         "res_company_view.xml",
         "report/is_report_rebuts.xml",
+        "views/bilan_fin_of_report.xml",
+        "views/report_paperformat.xml",
+        "views/report.xml",
     ],
     'demo': [],
     'installable': True,
