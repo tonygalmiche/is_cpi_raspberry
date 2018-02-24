@@ -246,11 +246,11 @@ class is_of(models.Model):
         #***********************************************************************
         return []
 
-    @api.multi
-    def bilan_fin_of(self):
-        cr = self._cr
 
-        #** Recherche id 'Production série' ************************************
+
+    @api.multi
+    def get_id_production_serie(self):
+        cr = self._cr
         SQL="""
             select id from is_etat_presse where name='Production série'
         """
@@ -259,7 +259,45 @@ class is_of(models.Model):
         id_etat_presse=0
         for row in result:
             id_etat_presse=row[0]
-        #***********************************************************************
+        return id_etat_presse
+
+
+    @api.multi
+    def get_cycle_moyen_serie(self):
+        cr = self._cr
+        id_production_serie=self.get_id_production_serie()
+        nb=len(self)
+        ct=0
+        for obj in self:
+            if obj.qt_theorique!=0:
+                ct=ct+1
+                SQL="""
+                    select
+                        ipa.type_arret_id,
+                        sum(ipa.tps_arret)
+                    from is_presse_arret ipa inner join is_presse_arret_of_rel ipaof on ipa.id=ipaof.is_of_id
+                                             inner join is_of                     io on ipaof.is_presse_arret_id=io.id
+                    where 
+                        ipaof.is_presse_arret_id="""+str(obj.id)+""" and 
+                        io.presse_id=ipa.presse_id and 
+                        ipa.type_arret_id="""+str(id_production_serie)+"""
+                    group by ipa.type_arret_id
+                """
+                cr.execute(SQL)
+                result = cr.fetchall()
+                tps_prod_serie=0
+                for row in result:
+                    tps_prod_serie=row[1]
+                cycle_moyen=tps_prod_serie*3600/obj.qt_theorique
+                obj.cycle_moyen_serie=cycle_moyen
+                _logger.info(str(ct)+u"/"+str(nb)+u" - Calcul cycle moyen "+obj.name+u' ('+str(cycle_moyen)+u')')
+
+
+    @api.multi
+    def bilan_fin_of(self):
+        cr = self._cr
+
+        id_etat_presse=self.get_id_production_serie()
 
         nb=len(self)
         ct=0
