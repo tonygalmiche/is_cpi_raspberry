@@ -425,6 +425,13 @@ class is_of(models.Model):
             obj.taux_rebut_theo = taux_rebut_theo
             #*******************************************************************
 
+
+            #** Envoi par mail *************************************************
+            if obj.impression_bilan!=True and obj.heure_fin:
+                obj.envoyer_par_mail_action()
+                obj.impression_bilan=True
+            #*******************************************************************
+
         return []
 
 
