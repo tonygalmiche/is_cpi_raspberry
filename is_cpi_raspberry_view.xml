@@ -304,6 +304,19 @@
 
 
 
+    <record id="calcul_qt_rebut_action_server" model="ir.actions.server">
+         <field name="name">Recalcul Qt Rebuts</field>
+        <field name="model_id" ref="model_is_of"/>
+        <field name="code">action = self.get_qt_rebut(cr, uid, context.get('active_ids', []), context=context)</field>
+    </record>
+    <record id="calcul_qt_rebut_ir_value" model="ir.values">
+        <field eval="'client_action_multi'" name="key2"/>
+        <field eval="'is.of'" name="model"/>
+        <field name="name">Recalcul Qt Rebuts</field>
+        <field eval="'ir.actions.server,%d'%calcul_qt_rebut_action_server" name="value"/>
+    </record>
+
+
 
 
 

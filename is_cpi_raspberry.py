@@ -296,6 +296,27 @@ class is_of(models.Model):
 
 
     @api.multi
+    def get_qt_rebut(self):
+        cr = self._cr
+        nb=len(self)
+        ct=0
+        for obj in self:
+            ct=ct+1
+            SQL="""
+                select sum(iod.qt_rebut) 
+                from is_of_declaration iod
+                where iod.of_id="""+str(obj.id)+"""
+            """
+            cr.execute(SQL)
+            result = cr.fetchall()
+            qt_rebut=0
+            for row in result:
+                qt_rebut=row[0]
+            obj.qt_rebut=qt_rebut
+            _logger.info(str(ct)+u"/"+str(nb)+u" - Recalcul Qt Rebut "+obj.name+u' ('+str(qt_rebut)+u')')
+
+
+    @api.multi
     def bilan_fin_of(self):
         cr = self._cr
 
@@ -385,6 +406,7 @@ class is_of(models.Model):
 
 
             #** Taux de rebuts *************************************************
+            self.get_qt_rebut()
             qt_bonne = obj.qt_declaree or 0
             qt_rebut = obj.qt_rebut or 0
             taux_rebut=0
