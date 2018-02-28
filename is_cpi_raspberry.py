@@ -213,38 +213,40 @@ class is_of(models.Model):
     _defaults = {}
 
 
-    def run_bilan_fin_of_scheduler_action(self, cr, uid, use_new_cursor=False, company_id = False, context=None):
-        self.run_bilan_fin_of(cr, uid, context)
+
+#    # TODO : Fonction désactivée car pb d'accès concurrent avec les Raspberry
+#    def run_bilan_fin_of_scheduler_action(self, cr, uid, use_new_cursor=False, company_id = False, context=None):
+#        self.run_bilan_fin_of(cr, uid, context)
 
 
-    @api.multi
-    def run_bilan_fin_of(self):
-        #** OF terminés depuis moins de 2 jours ********************************
-        _logger.info("#### Bilan des OF terminés depuis 24H - Début ####")
-        now  = datetime.date.today()                  # Date du jour
-        heure_fin = now + datetime.timedelta(days=-1) # Date -1 jour
-        heure_fin = heure_fin.strftime('%Y-%m-%d')    # Formatage
-        ofs=self.env['is.of'].search([
-            ('heure_fin' ,'>=',heure_fin),
-        ])
-        ofs.bilan_fin_of()
-        for of in ofs:
-            if of.impression_bilan!=True:
-                of.envoyer_par_mail_action()
-                of.impression_bilan=True
-        _logger.info("#### Bilan des OF terminés depuis 24H - Fin ####")
-        #***********************************************************************
+#    @api.multi
+#    def run_bilan_fin_of(self):
+#        #** OF terminés depuis moins de 2 jours ********************************
+#        _logger.info("#### Bilan des OF terminés depuis 24H - Début ####")
+#        now  = datetime.date.today()                  # Date du jour
+#        heure_fin = now + datetime.timedelta(days=-1) # Date -1 jour
+#        heure_fin = heure_fin.strftime('%Y-%m-%d')    # Formatage
+#        ofs=self.env['is.of'].search([
+#            ('heure_fin' ,'>=',heure_fin),
+#        ])
+#        ofs.bilan_fin_of()
+#        for of in ofs:
+#            if of.impression_bilan!=True:
+#                of.envoyer_par_mail_action()
+#                of.impression_bilan=True
+#        _logger.info("#### Bilan des OF terminés depuis 24H - Fin ####")
+#        #***********************************************************************
 
-        #** OF en cours ********************************************************
-        _logger.info("#### Bilan des OF en cours - Début ####")
-        ofs=self.env['is.of'].search([
-            ('heure_debut' ,'!=', False),
-            ('heure_fin'   ,'=' , False),
-        ])
-        ofs.bilan_fin_of()
-        _logger.info("#### Bilan des OF en cours - Fin ####")
-        #***********************************************************************
-        return []
+#        #** OF en cours ********************************************************
+#        _logger.info("#### Bilan des OF en cours - Début ####")
+#        ofs=self.env['is.of'].search([
+#            ('heure_debut' ,'!=', False),
+#            ('heure_fin'   ,'=' , False),
+#        ])
+#        ofs.bilan_fin_of()
+#        _logger.info("#### Bilan des OF en cours - Fin ####")
+#        #***********************************************************************
+#        return []
 
 
 

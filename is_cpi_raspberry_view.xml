@@ -774,9 +774,10 @@
 
 
     <!-- Lancement automatisé du calcul du bilan de fin d'OF -->
+    <!-- TODO : Fonction désactivée car pb d'accès concurrent avec les Raspberry -->
     <record forcecreate="True" id="is_bilan_fin_of_scheduler_action" model="ir.cron">
         <field name="name">Bilan de fin d'OF</field>
-        <field eval="True" name="active"/>
+        <field eval="False" name="active"/>
         <field name="user_id" ref="base.user_root"/>
         <field name="interval_number">10</field>
         <field name="interval_type">minutes</field>
