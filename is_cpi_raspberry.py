@@ -180,7 +180,7 @@ class is_of(models.Model):
     name              = fields.Char('N°OF' , required=True)
     moule             = fields.Char('Moule' , required=False)
     nb_empreintes     = fields.Integer("Nombre d'empreintes", required=False)
-    coef_cpi          = fields.Integer("Coefficient Theia", required=False)
+    coef_cpi          = fields.Float("Coefficient Theia", required=False, digits=(14,1))
     code_article      = fields.Char('Code article' , required=True)
     designation       = fields.Char('Désignation' , required=False)
     uc                = fields.Integer('Qt par UC', required=False)
