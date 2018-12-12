@@ -204,6 +204,7 @@ class is_of(models.Model):
     tps_restant       = fields.Float('Temps de production restant', required=False)
     heure_debut       = fields.Datetime('Heure de début de production', select=True, required=False)
     heure_fin         = fields.Datetime('Heure de fin de production', required=False, select=True)
+    heure_fin_planning= fields.Datetime('Heure de fin du planning')
     tps_ids           = fields.One2many('is.of.tps'  , 'of_id', u"Répartition des temps d'arrêt")
     rebut_ids         = fields.One2many('is.of.rebut', 'of_id', u"Répartition des rebuts")
     impression_bilan  = fields.Boolean('Bilan imprimé et envoyé par mail', select=True)

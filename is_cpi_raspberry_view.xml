@@ -316,10 +316,6 @@
         <field eval="'ir.actions.server,%d'%calcul_qt_rebut_action_server" name="value"/>
     </record>
 
-
-
-
-
     <record model="ir.ui.view" id="is_of_tree_view">
         <field name="name">is.of.tree</field>
         <field name="model">is.of</field>
@@ -344,11 +340,12 @@
                 <field name="taux_rebut"/>
                 <field name="taux_rebut_theo"/>
                 <field name="cycle_gamme"/>
-                <field name="cycle_moyen" />
-                <field name="cycle_moyen_serie" />
+                <field name="cycle_moyen"/>
+                <field name="cycle_moyen_serie"/>
                 <field name="tps_restant" widget="float_time"/>
-                <field name="heure_debut"  />
-                <field name="heure_fin"  />
+                <field name="heure_debut"/>
+                <field name="heure_fin"/>
+                <field name="heure_fin_planning"/>
             </tree>
         </field>
     </record>
@@ -397,6 +394,7 @@
                         <field name="tps_restant"       readonly="1" widget="float_time"/>
                         <field name="heure_debut"       readonly="1"/>
                         <field name="heure_fin"         readonly="1"/>
+                        <field name="heure_fin_planning" readonly="1"/>
                     </group>
                 </group>
                 <group>
