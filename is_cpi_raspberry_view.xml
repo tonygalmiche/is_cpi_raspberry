@@ -330,6 +330,7 @@
                 <field name="nb_empreintes"/>
                 <field name="coef_cpi"/>
                 <field name="code_article"/>
+                <field name="categorie"/>
                 <field name="designation"/>
                 <field name="presse_id"/>
                 <field name="affecte"/>
@@ -372,6 +373,7 @@
                         <field name="nb_empreintes"/>
                         <field name="coef_cpi"      readonly="1"/>
                         <field name="code_article"  readonly="1"/>
+                        <field name="categorie"     readonly="1"/>
                         <field name="designation"   readonly="1"/>
                         <field name="uc"            readonly="1"/>
                         <field name="cout"          readonly="1"/>
@@ -456,10 +458,6 @@
         </field>
     </record>
 
-
-
-
-
     <record model="ir.ui.view" id="is_of_search_view" >
         <field name="name">is.of.search</field>
         <field name="model">is.of</field>
@@ -468,10 +466,10 @@
                 <field name="name"/>
                 <field name="moule"/>
                 <field name="code_article"/>
+                <field name="categorie"/>
                 <field name="designation"/>
                 <field name="ordre"/>
                 <field name="presse_id"/>
-
                 <group expand="0" string="Regroupé par...">
                   <filter name="group_presse_id"    string="Presse"         context="{'group_by':'presse_id'}"/>
                   <filter name="group_moule"        string="Moule"          context="{'group_by':'moule'}"/>
@@ -479,8 +477,6 @@
                   <filter name="group_mois"         string="Mois"           context="{'group_by':'heure_debut:month'}"/>
                   <filter name="group_jour"         string="Jour"           context="{'group_by':'heure_debut:day'}"/>
                 </group>
-
-
             </search>
         </field>
     </record>

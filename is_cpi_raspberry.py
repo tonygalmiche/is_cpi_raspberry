@@ -182,6 +182,7 @@ class is_of(models.Model):
     nb_empreintes     = fields.Integer("Nombre d'empreintes", required=False)
     coef_cpi          = fields.Float("Coefficient Theia", required=False, digits=(14,1))
     code_article      = fields.Char('Code article' , required=True)
+    categorie         = fields.Char('Catégorie')
     designation       = fields.Char('Désignation' , required=False)
     uc                = fields.Integer('Qt par UC', required=False)
     cout              = fields.Float('Coût article', digits=(12,4), required=False)
