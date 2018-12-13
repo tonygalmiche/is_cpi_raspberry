@@ -11,7 +11,6 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-
 couleurs=[
     ('blanc','Blanc'),
     ('bleu','Bleu'),
@@ -59,12 +58,7 @@ class is_etat_presse(models.Model):
     _defaults = {}
 
 
-
-
-
-
 class is_presse(models.Model):
-
 
     def arret_raspberry(self, cr, uid, ids, context=None):
         for obj in self.browse(cr, uid, ids, context=context):
@@ -120,21 +114,10 @@ class is_presse(models.Model):
     def _nb_cycles(self):
         return
 
-#TODO : J'ai désactivé cette fonction le 01/04/17, car la requète prend trop de temps
-#        cr, uid, context = self.env.args
-#        context = context or {}
-#        for obj in self:
-#            cr.execute("""
-#                select count(*) 
-#                from is_presse_cycle 
-#                where presse_id="""+str(obj.id))
-#            nb_cycles = cr.fetchone()[0] or 0.0
-#            obj.nb_cycles = nb_cycles
-
 
     _name = 'is.presse'
     _description = u"Presse"
-    _order='name'    #Ordre de tri par defaut des listes
+    _order='name'
 
     name           = fields.Char('Code' , required=True)
     intitule       = fields.Char('Intitulé', required=True)
@@ -144,7 +127,7 @@ class is_presse(models.Model):
     etat_presse_id = fields.Many2one('is.etat.presse', u"État Presse", required=False)
     couleur        = fields.Char('Couleur'            , compute='_couleur')
     nb_cycles      = fields.Integer('Nombre de cycles', compute='_nb_cycles')
-
+    prioritaire    = fields.Boolean('Presse prioritaire')
 
     _sql_constraints = [
         ('name_uniq', 'unique(name)', u"Le code de la presse doit être unique !"),
@@ -156,7 +139,7 @@ class is_presse(models.Model):
 class is_raspberry(models.Model):
     _name = 'is.raspberry'
     _description = u"raspberry"
-    _order='name'    #Ordre de tri par defaut des listes
+    _order='name'
     
     name      = fields.Char('Adresse IP' , required=True)
     presse_id = fields.Many2one('is.presse', u"Presse", required=False)
@@ -166,9 +149,6 @@ class is_raspberry(models.Model):
     ]
     
     _defaults = {}
-
-
-
 
 
 class is_of(models.Model):
@@ -208,48 +188,12 @@ class is_of(models.Model):
     tps_ids           = fields.One2many('is.of.tps'  , 'of_id', u"Répartition des temps d'arrêt")
     rebut_ids         = fields.One2many('is.of.rebut', 'of_id', u"Répartition des rebuts")
     impression_bilan  = fields.Boolean('Bilan imprimé et envoyé par mail', select=True)
+    prioritaire       = fields.Boolean('Ordre de fabrication prioritaire')
     
     _sql_constraints = [
         ('name_uniq', 'unique(name)', u"Le numéro d'OF doit être unique !"),
     ]
     _defaults = {}
-
-
-
-#    # TODO : Fonction désactivée car pb d'accès concurrent avec les Raspberry
-#    def run_bilan_fin_of_scheduler_action(self, cr, uid, use_new_cursor=False, company_id = False, context=None):
-#        self.run_bilan_fin_of(cr, uid, context)
-
-
-#    @api.multi
-#    def run_bilan_fin_of(self):
-#        #** OF terminés depuis moins de 2 jours ********************************
-#        _logger.info("#### Bilan des OF terminés depuis 24H - Début ####")
-#        now  = datetime.date.today()                  # Date du jour
-#        heure_fin = now + datetime.timedelta(days=-1) # Date -1 jour
-#        heure_fin = heure_fin.strftime('%Y-%m-%d')    # Formatage
-#        ofs=self.env['is.of'].search([
-#            ('heure_fin' ,'>=',heure_fin),
-#        ])
-#        ofs.bilan_fin_of()
-#        for of in ofs:
-#            if of.impression_bilan!=True:
-#                of.envoyer_par_mail_action()
-#                of.impression_bilan=True
-#        _logger.info("#### Bilan des OF terminés depuis 24H - Fin ####")
-#        #***********************************************************************
-
-#        #** OF en cours ********************************************************
-#        _logger.info("#### Bilan des OF en cours - Début ####")
-#        ofs=self.env['is.of'].search([
-#            ('heure_debut' ,'!=', False),
-#            ('heure_fin'   ,'=' , False),
-#        ])
-#        ofs.bilan_fin_of()
-#        _logger.info("#### Bilan des OF en cours - Fin ####")
-#        #***********************************************************************
-#        return []
-
 
 
     @api.multi
@@ -433,9 +377,7 @@ class is_of(models.Model):
                 obj.envoyer_par_mail_action()
                 obj.impression_bilan=True
             #*******************************************************************
-
         return []
-
 
 
     @api.multi
@@ -501,9 +443,6 @@ class is_of(models.Model):
                 self.env['mail.mail'].send(email_id)
 
                 _logger.info(u"Envoi par mail du bilan de l'OF "+obj.name+u' à '+u';'.join(email_to))
-
-
-
 
 
 class is_of_tps(models.Model):
@@ -602,7 +541,5 @@ class is_type_defaut(models.Model):
         ('name_uniq', 'unique(name)', u"Le type de défaut doit être unique !"),
     ]
     _defaults = {}
-
-
 
 

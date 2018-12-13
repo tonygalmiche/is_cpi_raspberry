@@ -17,17 +17,14 @@
               parent="menu_is_cpi_raspberry_root" sequence="40" groups="base.group_erp_manager"/>
 
 
-
-
-
-
     <!-- Presse -->
     <record model="ir.ui.view" id="is_presse_tree_view">
         <field name="name">is.presse.tree</field>
         <field name="model">is.presse</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="name" />
+                <field name="name"/>
+                <field name="prioritaire"/>
                 <field name="intitule"/>
                 <field name="ilot_id"/>
                 <field name="ordre"/>
@@ -59,13 +56,13 @@
                             type="object" icon="fa-refresh"    groups="base.group_erp_manager"/>
                 </div>
                 <group>
-                    <field name="name" />
-                    <field name="intitule" />
+                    <field name="name"/>
+                    <field name="prioritaire" readonly="1"/>
+                    <field name="intitule"/>
                     <field name="ilot_id"/>
                     <field name="ordre"/>
                     <field name="raspberry_id"/>
                     <field name="etat_presse_id" readonly="1"/>
-                    <!--<field name="nb_cycles"/>-->
                 </group>
             </sheet>
         </form>
@@ -104,15 +101,6 @@
 
 
     <!-- Parc des presses -->
-    <!--
-    <record model="ir.actions.act_url" id="is_url_parc_presses_action">
-        <field name="name">http://raspberry-cpi/atelier.php</field>
-        <field name="url">http://raspberry-cpi/atelier.php</field>
-        <field name="type">ir.actions.act_url</field>
-    </record>
-    -->
-
-    <!-- Parc des presses -->
     <record model="ir.actions.act_url" id="is_url_parc_presses_action">
         <field name="name">is_url_parc_presses_action</field>
         <field name="type">ir.actions.act_url</field>
@@ -121,15 +109,6 @@
               parent="menu_is_presse_root" sequence="15" />
 
 
-
-    <!-- Indicateurs -->
-    <!--
-    <record model="ir.actions.act_url" id="is_url_indicateur_rebuts_action">
-        <field name="name">Rebuts</field>
-        <field name="url">http://odoo/odoo-cpi/rebuts.php</field>
-        <field name="type">ir.actions.act_url</field>
-    </record>
-    -->
     <record model="ir.actions.act_url" id="is_url_indicateur_rebuts_action">
         <field name="name">is_url_indicateur_rebuts_action</field>
         <field name="type">ir.actions.act_url</field>
@@ -137,13 +116,6 @@
     <menuitem name="Rebuts" id="is_url_indicateur_rebuts_menu" action="is_url_indicateur_rebuts_action"
               parent="menu_is_cpi_indicateurs" sequence="10" />
 
-    <!--
-    <record model="ir.actions.act_url" id="is_url_indicateur_trs_action">
-        <field name="name">TRS</field>
-        <field name="url">http://odoo/odoo-cpi/trs.php</field>
-        <field name="type">ir.actions.act_url</field>
-    </record>
-    -->
     <record model="ir.actions.act_url" id="is_url_indicateur_trs_action">
         <field name="name">is_url_indicateur_trs_action</field>
         <field name="type">ir.actions.act_url</field>
@@ -250,10 +222,7 @@
                 <field name="presse_id"/>
                 <field name="type_arret_id"/>
                 <field name="of_ids" />
-
-                <!-- Filtres pré-enregistrés -->
                 <filter string="Production série + Essai" name="production_serie_essai" domain="['|',('type_arret_id','=',1),('type_arret_id','=',13)]"/>
-
                 <group expand="0" string="Regroupé par...">
                   <filter name="group_presse_id"     string="Presse"       context="{'group_by':'presse_id'}"/>
                   <filter name="group_type_arret_id" string="Type d'arrêt" context="{'group_by':'type_arret_id'}"/>
@@ -275,7 +244,6 @@
               sequence="30"/>
 
 
-
     <!-- of -->
     <record id="bilan_fin_of_action_server" model="ir.actions.server">
          <field name="name">Bilan de fin d'OF</field>
@@ -289,7 +257,6 @@
         <field eval="'ir.actions.server,%d'%bilan_fin_of_action_server" name="value"/>
     </record>
 
-
     <record id="calcul_cycle_moyen_action_server" model="ir.actions.server">
          <field name="name">Calcul du cycle moyen série</field>
         <field name="model_id" ref="model_is_of"/>
@@ -301,8 +268,6 @@
         <field name="name">Calcul du cycle moyen série</field>
         <field eval="'ir.actions.server,%d'%calcul_cycle_moyen_action_server" name="value"/>
     </record>
-
-
 
     <record id="calcul_qt_rebut_action_server" model="ir.actions.server">
          <field name="name">Recalcul Qt Rebuts</field>
@@ -322,6 +287,7 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="name"/>
+                <field name="prioritaire"/>
                 <field name="moule"/>
                 <field name="nb_empreintes"/>
                 <field name="coef_cpi"/>
@@ -365,7 +331,8 @@
             <sheet>
                 <group>
                     <group>
-                        <field name="name" readonly="1"/>
+                        <field name="name"          readonly="1"/>
+                        <field name="prioritaire"   readonly="1"/>
                         <field name="moule"         readonly="1"/>
                         <field name="nb_empreintes"/>
                         <field name="coef_cpi"      readonly="1"/>
@@ -512,7 +479,6 @@
               parent="menu_is_of_root" 
               sequence="14"/>
 
-
     <record model="ir.actions.act_window" id="is_of_tous_action">
         <field name="name">Tous les OF</field>
         <field name="type">ir.actions.act_window</field>
@@ -524,7 +490,6 @@
               id="menu_is_of_tous" 
               parent="menu_is_of_root" 
               sequence="15"/>
-
 
     <!-- Déclaration des OF -->
     <record model="ir.ui.view" id="is_of_declaration_tree_view">
@@ -799,8 +764,6 @@
     <!-- Déplacement des menus standard pour les masquer -->
     <menuitem id="mail.mail_feeds_main"      sequence="90" name="Messagerie"         parent="base.menu_custom"/>
     <menuitem id="knowledge.menu_document"   sequence="91" name="Connaissances"      parent="base.menu_custom"/>
-
-
 
 
 </data>
