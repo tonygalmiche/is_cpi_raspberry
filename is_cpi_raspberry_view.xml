@@ -420,6 +420,9 @@
             <field name="qt_rebut" position="replace">
                 <field name="qt_rebut"/>
             </field>
+            <field name="cycle_gamme" position="replace">
+                <field name="cycle_gamme"/>
+            </field>
         </field>
     </record>
 
